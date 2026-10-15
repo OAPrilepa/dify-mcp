@@ -599,6 +599,31 @@ export const tools: Tool[] = [
     run: async (args, ctx) => (needClient(ctx, "console") as ConsoleClient).runDraft(req(args, "app_id"), obj(args, "inputs")),
   },
   {
+    name: "workflow.chat_draft",
+    summary: "Send a user message to a chatflow (advanced-chat) draft; returns the SSE event list. workflow.run_draft covers workflow apps only.",
+    needs: "console",
+    schema: {
+      type: "object",
+      properties: {
+        app_id: S("app uuid"),
+        query: S("user message"),
+        inputs: O("input variables"),
+        conversation_id: S("continue an existing draft conversation"),
+        files: { type: "array" },
+      },
+      required: ["app_id", "query"],
+    },
+    run: async (a, ctx) => {
+      const body: Record<string, unknown> = {
+        query: req(a, "query"),
+        inputs: a.inputs && typeof a.inputs === "object" ? a.inputs : {},
+        files: Array.isArray(a.files) ? a.files : [],
+      };
+      if (str(a.conversation_id)) body.conversation_id = str(a.conversation_id);
+      return (needClient(ctx, "console") as ConsoleClient).runChatflowDraft(req(a, "app_id"), body);
+    },
+  },
+  {
     name: "workflow.run",
     summary: "Run the published app with inputs; returns the SSE event list. Console cookies first; OpenAPI token fallback.",
     schema: { type: "object", properties: { app_id: S("app uuid"), inputs: O("input variables") }, required: ["app_id", "inputs"] },

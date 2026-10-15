@@ -70,3 +70,23 @@ test("ConsoleClient stream surfaces onEvent from constructor", async () => {
     restore();
   }
 });
+
+test("workflow.chat_draft posts query to the advanced-chat draft endpoint", async () => {
+  const calls: Array<{ url: string; body: unknown }> = [];
+  const restore = mockFetch((url, init) => {
+    calls.push({ url, body: init?.body ? JSON.parse(String(init.body)) : undefined });
+    return new Response("data: {\"event\":\"message_end\"}\n\n", {
+      status: 200,
+      headers: { "content-type": "text/event-stream" },
+    });
+  });
+  try {
+    const client = new ConsoleClient("https://dify.example", "tok");
+    const result = await client.runChatflowDraft("app-1", { query: "hi", inputs: {}, files: [] });
+    assert.equal(result.ok, true);
+    assert.match(calls[0].url, /\/console\/api\/apps\/app-1\/advanced-chat\/workflows\/draft\/run$/);
+    assert.deepEqual(calls[0].body, { query: "hi", inputs: {}, files: [] });
+  } finally {
+    restore();
+  }
+});

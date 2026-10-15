@@ -17,6 +17,7 @@ const NS_ALIASES: Record<string, string> = {
 };
 const CMD_ALIASES: Record<string, string> = {
   "workflow test": "workflow.run_draft",
+  "workflow chat": "workflow.chat_draft",
   "workflow draft get": "workflow.get_draft",
   "workflow draft sync": "workflow.sync_draft",
   "workflow node defaults": "workflow.node_defaults",
@@ -25,7 +26,7 @@ const CMD_ALIASES: Record<string, string> = {
 const POSITIONALS: Record<string, string[]> = {
   "app.get": ["app_id"], "app.update": ["app_id"], "app.list_tags": ["app_id"], "app.ensure_tag": ["app_id", "tag"], "app.remove_tag": ["app_id", "tag"], "app.delete": ["app_id"], "app.export": ["app_id"], "app.backup": ["path"], "app.restore": ["path"],
   "workflow.get_draft": ["app_id"], "workflow.node_defaults": ["app_id", "node_type"], "workflow.sync_draft": ["app_id"],
-  "workflow.run_draft": ["app_id"], "workflow.run": ["app_id"], "workflow.publish": ["app_id"],
+  "workflow.run_draft": ["app_id"], "workflow.chat_draft": ["app_id"], "workflow.run": ["app_id"], "workflow.publish": ["app_id"],
   "workflow.run_node": ["app_id", "node_id"], "workflow.node_last_run": ["app_id", "node_id"], "workflow.events": ["app_id", "task_id"], "workflow.stop": ["app_id", "task_id"],
   "workflow.tool_get": ["app_id"], "workflow.tool_refresh_provider": ["app_id"], "workflow.tool_delete": ["workflow_tool_id"],
   "provider.models": ["provider"],

@@ -322,6 +322,9 @@ export class ConsoleClient {
   runDraft(appId: string, inputs: Record<string, unknown>): Promise<Result<unknown[]>> {
     return this.stream(`apps/${appId}/workflows/draft/run`, { body: { inputs } });
   }
+  runChatflowDraft(appId: string, body: Record<string, unknown>): Promise<Result<unknown[]>> {
+    return this.stream(`apps/${appId}/advanced-chat/workflows/draft/run`, { body });
+  }
   runPublished(appId: string, inputs: Record<string, unknown>): Promise<Result<unknown[]>> {
     return this.stream(`apps/${appId}/workflows/run`, { body: { inputs } });
   }
