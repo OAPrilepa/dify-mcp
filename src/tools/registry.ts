@@ -585,8 +585,10 @@ export const tools: Tool[] = [
       const envVars = args.environment_variables ?? fields.environment_variables;
       const convVars = args.conversation_variables ?? fields.conversation_variables;
       const hash = str(args.hash) ?? fields.hash;
-      if (envVars !== undefined) body.environment_variables = envVars;
-      if (convVars !== undefined) body.conversation_variables = convVars;
+      // Dify 1.17.1 rejects even an empty [] copied back from the current draft.
+      const present = (v: unknown) => v !== undefined && !(Array.isArray(v) && v.length === 0);
+      if (present(envVars)) body.environment_variables = envVars;
+      if (present(convVars)) body.conversation_variables = convVars;
       if (hash !== undefined) body.hash = hash;
       return client.syncDraft(req(args, "app_id"), body);
     },
